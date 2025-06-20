@@ -3,6 +3,11 @@ Feature: Manejo de API
 
   Background:
     Given url "http://bp-se-test-cabcd9b246a5.herokuapp.com/testuser/api"
+    Given path "characters"
+    When method Get
+    Then status 200
+    * def personajeResponse = response[0].id
+    * print personajeResponse
 
   Scenario: Consulta Personajes
     Given path "characters"
@@ -106,3 +111,11 @@ Feature: Manejo de API
     And match response.error == "Character not found"
     Examples:
       | read("data/data-error.csv") |
+
+  Scenario: Elimina personaje por ID (exitoso)
+    Given path "characters", personajeResponse
+    When method Delete
+    Then status 204
+    * print personajeResponse
+    * print response
+    And match response != null
